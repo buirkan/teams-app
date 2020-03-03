@@ -13,9 +13,6 @@ function Home() {
 export default Home
 
 /*
-    https://js.coach/?collection=React
-    https://spectrum.chat/react?tab=posts
-
     A aplicação deve atender as seguintes histórias:
     Como torcedor do [time selecionado] quero visualizar as partidas e resultados do time na
     temporada de 2019 na Copa do Brasil e Campeonato Brasileiro.
