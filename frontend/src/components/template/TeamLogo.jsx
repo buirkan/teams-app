@@ -8,13 +8,13 @@ const LogoArea = styled.div`
 
 // styled.img.attrs({ src: '' })
 const Image = styled.span`
-    height: ${props => props.big ? '100px' : '50px'};
-    width: ${props => props.big ? '100px' : '50px'};
+    height: ${props => props.largeImage ? '100px' : '50px'};
+    width: ${props => props.largeImage ? '100px' : '50px'};
 `
 
-const Logo = () => (
+const Logo = (props) => (
     <LogoArea>
-        <Image>
+        <Image largeImage={props.large}>
             Logo
         </Image>
     </LogoArea>

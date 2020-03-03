@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react'
+import React, { Fragment } from 'react'
 import Modal from './template/Modal'
 
 const TeamDetails = () => {

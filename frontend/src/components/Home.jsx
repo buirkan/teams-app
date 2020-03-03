@@ -1,6 +1,5 @@
 import React from 'react'
 import Header from './template/Header'
-// import TeamSelect from './TeamSelect'
 
 function Home() {
     return (

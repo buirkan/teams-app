@@ -45,7 +45,6 @@ const CloseButton = styled.button`
         transform: scale(1.1) perspective(0.8px);
     };
 `
-
 const Modal = () => {
     const [display, changeDisplay] = useState('block')
     const handleBgClick = () => changeDisplay('none')

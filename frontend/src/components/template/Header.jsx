@@ -18,7 +18,7 @@ const Title = styled.h1`
 
 const Header = () => (
     <Nav>
-        <TeamLogo />
+        <TeamLogo large={true} />
         <Title>Meu Time</Title>
     </Nav>
 )
