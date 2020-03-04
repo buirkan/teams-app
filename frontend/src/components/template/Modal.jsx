@@ -53,10 +53,7 @@ const Modal = () => {
         <Fragment>
             <ModalBg show={display} onClick={handleBgClick} />
             <DetailModal show={display}>
-                <CloseButton onClick={handleBgClick}>
-                    {/* webpack bundle dependecies! */}
-                    {/* <i className='fa fa-close' /> */}
-                </CloseButton>
+                <CloseButton onClick={handleBgClick} />
             </DetailModal>
         </Fragment>
     )

@@ -1,10 +1,12 @@
 import React from 'react'
 import Header from './template/Header'
+import FavoriteTeam from './FavoriteTeam'
 
 function Home() {
     return (
         <div className="App">
             <Header />
+            <FavoriteTeam />
         </div>
     )
 }
