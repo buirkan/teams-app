@@ -1,0 +1,54 @@
+type Champioship {
+    id: ID,
+    nome: String,
+    nomeDaTaca: String,
+    temporada: String,
+    quantidadeDeEquipes: String,
+    rodadaAtual: Int,
+    urlLogo:String
+}
+
+type MatchDate {
+    hour: Int,
+    minute: Int,
+    dayOfMonth: Int,
+    monthValue: Int,
+    year: Int 
+},
+
+type Score {
+    golsMandante: Int!,
+    golsVisitante: Int!,
+    vitoriaMandante: Boolean,
+    derrotaVisitante: Boolean,
+    derrotaMandante: Boolean,
+    vitoriaVisitante: Boolean
+}
+
+type Matches {
+    id: ID!,
+    idCampeonato: ID!,
+    idEquipeMandante: ID!,
+    idEquipeVisitante: ID!,
+    idEstadio: ID!,
+    dataDaPartida: MatchDate,
+    rodada: Int!,
+    placar: Score!
+}
+
+type Estadio {
+    id: ID!,
+    nome: String!,
+    cidade: String!,
+    estado: String!,
+    pais: String!
+}
+
+type Query {
+    copaBrasil: Champioship!
+    brasileiro: Champioship!
+    partidasCopaBrasil: [Matches!]
+    partidasBrasileiro: [Matches!]
+    estadios:[Estadio!]
+    getEstadio(id: ID): [Estadio!]
+}

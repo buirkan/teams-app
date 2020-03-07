@@ -1,19 +1,29 @@
 import React from 'react'
+import { ApolloProvider } from 'react-apollo'
+import ApolloClient from 'apollo-boost'
 import Header from './template/Header'
 import FavoriteTeam from './FavoriteTeam'
 
+const client = new ApolloClient({
+    uri: 'https://localhost:4004/'
+})
+
 function Home() {
     return (
-        <div className="App">
-            <Header />
-            <FavoriteTeam />
-        </div>
+        <ApolloProvider client={client}>
+            <div className="App">
+                <Header />
+                <FavoriteTeam />
+            </div>
+        </ApolloProvider>
     )
 }
 
 export default Home
 
 /*
+    react graphql usage examples: https://www.youtube.com/watch?v=-XwkFm5a9lw
+
     A aplicação deve atender as seguintes histórias:
     Como torcedor do [time selecionado] quero visualizar as partidas e resultados do time na
     temporada de 2019 na Copa do Brasil e Campeonato Brasileiro.

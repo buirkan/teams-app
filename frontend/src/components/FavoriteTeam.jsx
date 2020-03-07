@@ -18,3 +18,10 @@ const mapStateToProps = (state) => ({ teamsList: state.teams })
 const mapDispatchToProps = (dispatch) => (bindActionCreators(...actions, dispatch))
 
 export default connect(mapStateToProps, mapDispatchToProps)(FavoriteTeam)
+
+/* 
+    graphql & redux actions example:
+        https://github.com/kriasoft/react-starter-kit/issues/1686
+    graphql executing queries on react
+        https://www.apollographql.com/docs/react/data/queries/
+*/

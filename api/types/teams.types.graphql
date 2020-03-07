@@ -1,0 +1,16 @@
+type Team {
+    id: ID
+    nome: String
+    cidade: String
+    estado: String
+    pais: String
+    urlLogo: String
+    timeFantasia: Boolean
+}
+
+type Query {
+    timesCopaBrasil: [Team!]
+    getTimeCopaBrasil(id: ID): [Team!]
+    timesBrasileiro: [Team!]
+    getTimeBrasileiro(id: ID): [Team!]
+}

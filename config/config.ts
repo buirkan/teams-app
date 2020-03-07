@@ -1,5 +1,5 @@
-const config = {
-  port: "8000",
+const apiConfig = {
+  API_PORT: 4004,
   campeonatos: {
     CopaDoBrasil: {
       url: "https://futebol.homolog.groundsportech.com/samples/campeonatos/670.json",
@@ -15,4 +15,15 @@ const config = {
   urlEstadios: "https://futebol.homolog.groundsportech.com/samples/estadios.json",
 }
 
-module.exports = config
+const appConfig = {
+  dev: {
+    url: 'http://localhost',
+    port: '8000'
+  },
+  prod: {
+    url: '',
+    port: ''
+  }
+}
+
+export { apiConfig, appConfig }
