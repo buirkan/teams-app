@@ -40,6 +40,18 @@ export const GET_TEAMS_BRASILEIRO = gql`
         }
     }
 `
+
+export const GET_TEAMS_FAVORITO = gql`
+    {
+        timesBrasileiro {
+            id
+            nome
+            cidade
+            estado
+            urlLogo
+        }
+    }
+`
 export const GET_ONE_TEAM_BRASILEIRO = gql`
     query($id: ID) {
         getTimeBrasileiro(id: $id) {

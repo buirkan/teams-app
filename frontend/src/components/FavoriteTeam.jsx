@@ -3,10 +3,10 @@ import { useQuery } from '@apollo/react-hooks'
 import { Loader } from './template/Loader'
 import { connect } from 'react-redux'
 import { setMyTeam } from '../actions/teamActions'
-import { GET_TEAMS_BRASILEIRO } from '../queries/teamsQueries'
+import { GET_TEAMS_FAVORITO } from '../queries/teamsQueries'
 
 const FavoriteTeam = (props) => {
-    const { loading, error, data } = useQuery(GET_TEAMS_BRASILEIRO)
+    const { loading, error, data } = useQuery(GET_TEAMS_FAVORITO)
     const addFavoriteAction = props.myTeamAction
     var teams = null
 
@@ -23,6 +23,7 @@ const FavoriteTeam = (props) => {
                 <button onClick={() => setFavoriteTeam(team)}>
                     <img src={team.urlLogo} alt={altText} />
                     <h4>{team.nome}</h4>
+                    <p>{team.cidade} - {team.estado}</p>
                 </button>
             </li>
         )

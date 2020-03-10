@@ -1,6 +1,7 @@
 import React from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_ONE_TEAM_BRASILEIRO } from '../queries/teamsQueries'
+import { GET_ONE_STADIUM } from '../queries/champioshipsQueries'
 import { Loader } from './template/Loader'
 
 const MatchItem = (props) => {
@@ -15,11 +16,18 @@ const MatchItem = (props) => {
             id: props.itemOfMatch.idEquipeVisitante
         }
     })
+    const stadium = useQuery(GET_ONE_STADIUM, {
+        variables: {
+            id: props.itemOfMatch.idEstadio
+        }
+    })
 
     var responseHomeData = null
-    var responseAwayData = null
+    var responseAwayData = null 
+    var responseStadium = null 
+    var matchData = null
 
-    if (homeTeam.loading || awayTeam.loading)
+    if (homeTeam.loading || awayTeam.loading || stadium.loading)
         return <Loader />
 
     if (homeTeam.data)
@@ -28,16 +36,20 @@ const MatchItem = (props) => {
     if (awayTeam.data)
         responseAwayData = awayTeam.data.getTimeBrasileiro
 
-    if (homeTeam.data && awayTeam.data)
-        console.log({ 
-            ...props, 
-            equipeMandante: { ...responseHomeData }, 
-            equipeVisitante: { ...responseAwayData } 
-        })
+    if (stadium.data)
+        responseStadium = stadium.data.getEstadio
+
+    if (homeTeam.data && awayTeam.data && stadium.data)
+        matchData = {
+            ...props,
+            equipeMandante: { ...responseHomeData },
+            equipeVisitante: { ...responseAwayData },
+            estadio: { ...responseStadium }
+        }
 
     return (
         <div>
-            {/* {JSON.stringify(responseHomeData)} */}
+            {JSON.stringify(matchData)}
         </div>
     )
 }
