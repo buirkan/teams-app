@@ -1,29 +1,53 @@
-import React from 'react'
+import React, { Fragment } from 'react'
+import { connect } from 'react-redux'
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
-import Header from './template/Header'
 import FavoriteTeam from './FavoriteTeam'
+import Header from '../components/template/Header'
+import ChampioshipList from '../components/ChampioshipList'
+import { setMyTeam } from '../actions/teamActions'
 
 const client = new ApolloClient({
-    uri: 'https://localhost:4004/'
+    uri: 'http://localhost:4004/'
 })
 
-function Home() {
+const Home = (props) => {
+    const favoriteAction = props.setFavoriteTeam
+
+    const CheckFavoriteStatus = () => {
+        const favoriteTeamSelected = JSON.parse(localStorage.getItem('favoriteTeam'))
+
+        if (!favoriteTeamSelected) {
+            return <FavoriteTeam />
+        }
+        else {
+            favoriteAction(favoriteTeamSelected)
+            return (
+                <Fragment>
+                    <Header team={favoriteTeamSelected} large={true} />
+                    <ChampioshipList />
+                </Fragment>
+            )
+        }
+    }
+
     return (
         <ApolloProvider client={client}>
             <div className="App">
-                <Header />
-                <FavoriteTeam />
+                <CheckFavoriteStatus />
             </div>
         </ApolloProvider>
     )
 }
 
-export default Home
+const mapStateToProps = (state) => ({ myTeam: state.myTeam })
+const mapDispatchToProps = (dispatch) => ({
+    setFavoriteTeam: (t) => dispatch(setMyTeam(t))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home)
 
 /*
-    react graphql usage examples: https://www.youtube.com/watch?v=-XwkFm5a9lw
-
     A aplicação deve atender as seguintes histórias:
     Como torcedor do [time selecionado] quero visualizar as partidas e resultados do time na
     temporada de 2019 na Copa do Brasil e Campeonato Brasileiro.

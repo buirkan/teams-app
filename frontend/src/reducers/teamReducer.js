@@ -1,13 +1,14 @@
-const INITIAL_STATE = { teams: [] }
+const INITIAL_STATE = { 
+    teams: [], 
+    myTeam: null 
+}
 
 // pure function
 export default function (state = INITIAL_STATE, action) {
     switch (action.type) {
-        case 'TEAMS_SEARCHED':
-            return {
-                ...state, teams: action.payload
-            }
-            default:
-                return state
+        case 'FAVORITE_TEAM_ADDED':
+            return { ...state, myTeam: action.payload }
+        default:
+            return state
     }
 }

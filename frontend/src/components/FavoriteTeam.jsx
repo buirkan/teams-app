@@ -1,27 +1,56 @@
 import React from 'react'
-import { bindActionCreators } from 'redux'
+import { useQuery } from '@apollo/react-hooks'
+import { Loader } from './template/Loader'
 import { connect } from 'react-redux'
-import { getTeams } from '../actions/teamActions'
-
-const actions = [getTeams]
+import { setMyTeam } from '../actions/teamActions'
+import { GET_TEAMS_BRASILEIRO } from '../queries/teamsQueries'
 
 const FavoriteTeam = (props) => {
-    const { getTeams } = props
+    const { loading, error, data } = useQuery(GET_TEAMS_BRASILEIRO)
+    const addFavoriteAction = props.myTeamAction
+    var teams = null
+
+    const setFavoriteTeam = (teamSelected) => {
+        localStorage.setItem('favoriteTeam', JSON.stringify(teamSelected))
+        addFavoriteAction(teamSelected)
+    }
+
+    const TeamItem = ({ team }) => {
+        const altText = `Logo do time ${team.nome}`
+
+        return (
+            <li>
+                <button onClick={() => setFavoriteTeam(team)}>
+                    <img src={team.urlLogo} alt={altText} />
+                    <h4>{team.nome}</h4>
+                </button>
+            </li>
+        )
+    }
+
+    if (loading)
+        return <Loader />
+
+    if (error)
+        return console.error(`Falha na requisição ${error.message}`)
+
+    if (data)
+        teams = data.timesBrasileiro
 
     return (
-        <div>
-            <button onClick={() => getTeams()}></button>
+        <div className="App">
+            <h1>Selecione o seu time do coração</h1>
+            <ul>
+                {teams.map(team => (
+                    <TeamItem key={team.id} team={team} />
+                ))}
+            </ul>
         </div>
     )
 }
-const mapStateToProps = (state) => ({ teamsList: state.teams })
-const mapDispatchToProps = (dispatch) => (bindActionCreators(...actions, dispatch))
+const mapStateToProps = (state) => ({ myTeam: state.myTeam })
+const mapDispatchToProps = dispatch => ({
+    myTeamAction: (t) => dispatch(setMyTeam(t))
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(FavoriteTeam)
-
-/* 
-    graphql & redux actions example:
-        https://github.com/kriasoft/react-starter-kit/issues/1686
-    graphql executing queries on react
-        https://www.apollographql.com/docs/react/data/queries/
-*/

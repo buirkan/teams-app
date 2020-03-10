@@ -10,7 +10,7 @@ type Team {
 
 type Query {
     timesCopaBrasil: [Team!]
-    getTimeCopaBrasil(id: ID): [Team!]
+    getTimeCopaBrasil(id: ID): Team
     timesBrasileiro: [Team!]
-    getTimeBrasileiro(id: ID): [Team!]
+    getTimeBrasileiro(id: ID): Team
 }

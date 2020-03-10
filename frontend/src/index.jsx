@@ -6,6 +6,7 @@ import promise from 'redux-promise'
 import ReduxThunk from 'redux-thunk'
 
 import '../src/components/template/App.css'
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
 import Home from './components/Home'
 import rootReducers from './reducers/rootReducers'
 

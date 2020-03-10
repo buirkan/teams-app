@@ -16,10 +16,10 @@ const Title = styled.h1`
     line-height: 0px;
 `
 
-const Header = () => (
+const Header = (props) => (
     <Nav>
-        <TeamLogo large={true} />
-        <Title>Meu Time</Title>
+        <TeamLogo large={true} team={props.team} />
+        <Title>{props.team.nome}</Title>
     </Nav>
 )
 

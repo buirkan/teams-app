@@ -20,7 +20,7 @@ const resolvers = {
                     time = times.filter(time => time.id == id)
                 })
                 .catch(err => console.log(err))
-            return time
+            return time[0]
         },
         timesBrasileiro: async () => {
             const url = apiConfig.campeonatos.Brasileiro.equipes
@@ -37,7 +37,7 @@ const resolvers = {
                     time = times.filter(time => time.id == id)
                 })
                 .catch(err => console.log(err))
-            return time
+            return time[0]
         }
     }
 }
