@@ -1,9 +1,8 @@
 import { gql } from 'apollo-boost'
 
-export const INFO_COPA_BRASIL = gql`
-    {
-        copaBrasil {
-            id
+export const INFO_LIGA = gql `
+    query($id: ID){
+        infoCampeonato(id: $id) {
             nome
             nomeDaTaca
             temporada
@@ -14,51 +13,10 @@ export const INFO_COPA_BRASIL = gql`
     }
 `
 
-export const INFO_BRASILEIRO = gql`
-    {
-        brasileiro {
-            id
-            nome
-            nomeDaTaca
-            temporada
-            quantidadeDeEquipes
-            rodadaAtual
-            urlLogo
-        }
-    }
-`
-
-export const MATCHES_COPA_BRASIL = gql`
+export const MATCHES_COPA_BRASIL = gql `
     {
         partidasCopaBrasil {
             id
-            idCampeonato
-            rodada
-            idEquipeMandante
-            idEquipeVisitante
-            idEstadio
-            dataDaPartida {
-                hour
-                minute
-                dayOfMonth
-                monthValue
-                year
-            }
-            placar {
-                vitoriaMandante
-                derrotaVisitante
-                derrotaMandante
-                vitoriaVisitante
-            }
-        }
-    }
-`
-
-export const MATCHES_BRASILEIRO = gql`
-    {
-        partidasBrasileiro {
-            id
-            idCampeonato
             rodada
             idEquipeMandante
             idEquipeVisitante
@@ -73,16 +31,81 @@ export const MATCHES_BRASILEIRO = gql`
             placar {
                 golsMandante
                 golsVisitante
-                vitoriaMandante
-                derrotaVisitante
-                derrotaMandante
-                vitoriaVisitante
             }
         }
     }
 `
 
-export const STADIUMS = gql`
+export const LAST_MATCH_COPA_BRASIL = gql `
+    query($teamId: ID) {
+        ultimaRodadaCopaBrasil(teamId: $teamId) {
+            id
+            rodada
+            idEquipeMandante
+            idEquipeVisitante
+            idEstadio
+            dataDaPartida {
+                hour
+                minute
+                dayOfMonth
+                monthValue
+                year
+            }
+            placar {
+                golsMandante
+                golsVisitante
+            }
+        }
+    }
+`
+
+export const MATCHES_BRASILEIRO = gql `
+    {
+        partidasBrasileiro {
+            id
+            rodada
+            idEquipeMandante
+            idEquipeVisitante
+            idEstadio
+            dataDaPartida {
+                hour
+                minute
+                dayOfMonth
+                monthValue
+                year
+            }
+            placar {
+                golsMandante
+                golsVisitante
+            }
+        }
+    }
+`
+
+export const LAST_MATCH_BRASILEIRO = gql `
+    query($teamId: ID) {
+        ultimaRodadaBrasileiro(teamId: $teamId) {
+            id
+            rodada
+            idEquipeMandante
+            idEquipeVisitante
+            idEstadio
+            dataDaPartida {
+                hour
+                minute
+                dayOfMonth
+                monthValue
+                year
+            }
+            placar {
+                golsMandante
+                golsVisitante
+            }
+        }
+    }
+`
+
+export const STADIUMS = gql `
     {
         estadios {
             id
@@ -94,7 +117,7 @@ export const STADIUMS = gql`
     }
 `
 
-export const GET_ONE_STADIUM = gql`
+export const GET_ONE_STADIUM = gql `
     query($id: ID) {
         getEstadio(id: $id) {
             id

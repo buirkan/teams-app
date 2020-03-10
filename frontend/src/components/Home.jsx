@@ -1,60 +1,32 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
-import { ApolloProvider } from 'react-apollo'
-import ApolloClient from 'apollo-boost'
-import FavoriteTeam from './FavoriteTeam'
-import Header from '../components/template/Header'
-import ChampioshipList from '../components/ChampioshipList'
-import { setMyTeam } from '../actions/teamActions'
+import { useQuery } from '@apollo/react-hooks'
+import Header from './template/Header'
+import Match from './Match'
+import Condition from './template/Condition'
+import { LAST_MATCH_BRASILEIRO, LAST_MATCH_COPA_BRASIL } from '../queries/champioshipsQueries'
 
-const client = new ApolloClient({
-    uri: 'http://localhost:4004/'
-})
+const HomePage = (props) => {
+    const lastMatchBr = useQuery(LAST_MATCH_BRASILEIRO, { variables: { teamId: props.myTeam.id } })
+    const lastMatchCb = useQuery(LAST_MATCH_COPA_BRASIL, { variables: { teamId: props.myTeam.id } })
+    var respLastMatchBr, respLastMatchCb = null
 
-const Home = (props) => {
-    const favoriteAction = props.setFavoriteTeam
+    if (lastMatchBr.data)
+        respLastMatchBr = lastMatchBr.data.ultimaRodadaBrasileiro
 
-    const CheckFavoriteStatus = () => {
-        const favoriteTeamSelected = JSON.parse(localStorage.getItem('favoriteTeam'))
-
-        if (!favoriteTeamSelected) {
-            return <FavoriteTeam />
-        }
-        else {
-            favoriteAction(favoriteTeamSelected)
-            return (
-                <Fragment>
-                    <Header team={favoriteTeamSelected} large={true} />
-                    <ChampioshipList />
-                </Fragment>
-            )
-        }
-    }
+    if (lastMatchCb.data)
+        respLastMatchCb = lastMatchCb.data.ultimaRodadaCopaBrasil
 
     return (
-        <ApolloProvider client={client}>
-            <div className="App">
-                <CheckFavoriteStatus />
-            </div>
-        </ApolloProvider>
+        <div>
+            <Header team={props.myTeam} large={true} />
+            <Condition condition={!lastMatchBr.loading && !lastMatchCb.loading}>
+                <Match itemOfMatch={respLastMatchBr} />
+                <Match itemOfMatch={respLastMatchCb} />
+            </Condition>
+        </div>
     )
 }
 
-const mapStateToProps = (state) => ({ myTeam: state.myTeam })
-const mapDispatchToProps = (dispatch) => ({
-    setFavoriteTeam: (t) => dispatch(setMyTeam(t))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Home)
-
-/*
-    A aplicação deve atender as seguintes histórias:
-    Como torcedor do [time selecionado] quero visualizar as partidas e resultados do time na
-    temporada de 2019 na Copa do Brasil e Campeonato Brasileiro.
-    Como torcedor do [time selecionado] quero clicar em um campeonato e visualizar todas as
-    partidas na temporada de 2019.
-    Como torcedor do [time selecionado] quero clicar em um time e ver as partidas contra o [time
-    selecionado] ao longo do ano, nos dois campeonatos, caso existam.
-    Como torcedor do [time selecionado] quero visualizar a página em meu celular e em meu PC sem
-    qualquer impacto na experiência e/ou desempenho.
-*/
+const mapStateToProps = (state) => ({ myTeam: state.team.myTeam })
+export default connect(mapStateToProps, null)(HomePage)

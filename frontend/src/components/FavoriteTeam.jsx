@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useQuery } from '@apollo/react-hooks'
 import { Loader } from './template/Loader'
 import { connect } from 'react-redux'
@@ -20,11 +21,13 @@ const FavoriteTeam = (props) => {
 
         return (
             <li>
-                <button onClick={() => setFavoriteTeam(team)}>
-                    <img src={team.urlLogo} alt={altText} />
-                    <h4>{team.nome}</h4>
-                    <p>{team.cidade} - {team.estado}</p>
-                </button>
+                <Link to="/home">
+                    <button onClick={() => setFavoriteTeam(team)}>
+                        <img src={team.urlLogo} alt={altText} />
+                        <h4>{team.nome}</h4>
+                        <p>{team.cidade} - {team.estado}</p>
+                    </button>
+                </Link>
             </li>
         )
     }
@@ -49,7 +52,7 @@ const FavoriteTeam = (props) => {
         </div>
     )
 }
-const mapStateToProps = (state) => ({ myTeam: state.myTeam })
+const mapStateToProps = (state) => ({ myTeam: state.team.myTeam })
 const mapDispatchToProps = dispatch => ({
     myTeamAction: (t) => dispatch(setMyTeam(t))
 })

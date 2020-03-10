@@ -1,8 +1,8 @@
-import React, { Fragment, Suspense } from 'react'
+import React, { Fragment } from 'react'
 import { useQuery } from '@apollo/react-hooks'
 import { MATCHES_BRASILEIRO } from '../queries/champioshipsQueries'
 import { Loader } from './template/Loader'
-import MatchItem from './MatchItem'
+import Match from './Match'
 
 const ChampioshipList = () => {
     const matches = useQuery(MATCHES_BRASILEIRO)
@@ -20,7 +20,7 @@ const ChampioshipList = () => {
     return (
         <Fragment>
             {matchesResponse.map(match =>
-                <MatchItem key={match.id} itemOfMatch={match} />
+                <Match key={match.id} itemOfMatch={match} />
             )}
         </Fragment>
     )

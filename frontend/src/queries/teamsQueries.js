@@ -16,7 +16,6 @@ export const GET_TEAMS_COPA_BRASIL = gql`
 export const GET_ONE_TEAM_COPA_BRASIL = gql`
     query($id: ID) {
         getTimeCopaBrasil(id: $id) {
-            id
             nome
             cidade
             estado
@@ -55,7 +54,6 @@ export const GET_TEAMS_FAVORITO = gql`
 export const GET_ONE_TEAM_BRASILEIRO = gql`
     query($id: ID) {
         getTimeBrasileiro(id: $id) {
-            id
             nome
             cidade
             estado

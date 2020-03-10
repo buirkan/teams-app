@@ -1,17 +1,21 @@
 import React from 'react'
 import styled from 'styled-components'
+// import Modal from './Modal'
 
+const LogoArea = styled.div`
+    display: inline-block;
+    cursor: pointer
+`
 const Logo = (props) => {
-    const LogoArea = styled.div`
-        display: inline-block;
-    `
-    const Image = styled.img.attrs({ src: props.team.urlLogo, alt: `Logo do time` })`
-        height: ${props => props.largeImage ? '100px' : '50px'};
-        width: ${props => props.largeImage ? '100px' : '50px'};
-    `
     return (
         <LogoArea>
-            <Image largeImage={props.large} />
+            <img
+                src={props.team.urlLogo}
+                alt={`Logo do time ${props.team.nome}`}
+                style={{
+                    height: props.largeImage ? '100px' : '50px',
+                    width: props.largeImage ? '100px' : '50px'
+                }} />
         </LogoArea>
     )
 }

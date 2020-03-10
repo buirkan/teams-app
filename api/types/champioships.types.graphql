@@ -45,10 +45,11 @@ type Estadio {
 }
 
 type Query {
-    copaBrasil: Champioship!
-    brasileiro: Champioship!
+    infoCampeonato(id: ID): Champioship!
     partidasCopaBrasil: [Matches!]
+    ultimaRodadaCopaBrasil(teamId: ID): Matches
     partidasBrasileiro: [Matches!]
+    ultimaRodadaBrasileiro(teamId: ID): Matches
     estadios:[Estadio!]
     getEstadio(id: ID): [Estadio!]
 }
