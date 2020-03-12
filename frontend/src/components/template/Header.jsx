@@ -16,11 +16,13 @@ const Title = styled.h1`
     line-height: 0px;
 `
 
-const Header = (props) => (
-    <Nav>
-        <TeamLogo large={true} team={props.team} />
-        <Title>{props.team.nome}</Title>
-    </Nav>
-)
+const Header = (props) => {
+    return (
+        <Nav>
+            <TeamLogo large={true} team={props.team} />
+            <Title>{props.team.nome}</Title>
+        </Nav>
+    )
+}
 
 export default Header

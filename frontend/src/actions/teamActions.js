@@ -4,3 +4,9 @@ export const setMyTeam = (team) => {
         payload: team
     }
 }
+
+export const removeFavoriteTeam = () => {
+    return {
+        type: 'REMOVE_FAVORITE_TEAM'
+    }
+}

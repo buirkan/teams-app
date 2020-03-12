@@ -50,6 +50,7 @@ type Query {
     ultimaRodadaCopaBrasil(teamId: ID): Matches
     partidasBrasileiro: [Matches!]
     ultimaRodadaBrasileiro(teamId: ID): Matches
+    confrontosCampeonato(idHome: ID, idAway: ID, idLeague: ID): [Matches!]
     estadios:[Estadio!]
     getEstadio(id: ID): [Estadio!]
 }

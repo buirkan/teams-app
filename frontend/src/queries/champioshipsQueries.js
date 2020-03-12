@@ -1,23 +1,46 @@
 import { gql } from 'apollo-boost'
 
-export const INFO_LIGA = gql `
+export const INFO_LIGA = gql`
     query($id: ID){
         infoCampeonato(id: $id) {
             nome
-            nomeDaTaca
             temporada
-            quantidadeDeEquipes
             rodadaAtual
             urlLogo
         }
     }
 `
 
-export const MATCHES_COPA_BRASIL = gql `
+export const CONFRONTOS_LIGA = gql`
+    query($idHome: ID, $idAway: ID, $idLeague: ID) {
+        confrontosCampeonato(idHome: $idHome, idAway: $idAway, idLeague: $idLeague) {
+            id
+            rodada
+            idEstadio
+            idCampeonato
+            idEquipeMandante
+            idEquipeVisitante
+            dataDaPartida {
+                hour
+                minute
+                dayOfMonth
+                monthValue
+                year
+            }
+            placar {
+                golsMandante
+                golsVisitante
+            }
+        }
+    }
+`
+
+export const MATCHES_COPA_BRASIL = gql`
     {
         partidasCopaBrasil {
             id
             rodada
+            idCampeonato
             idEquipeMandante
             idEquipeVisitante
             idEstadio
@@ -36,11 +59,12 @@ export const MATCHES_COPA_BRASIL = gql `
     }
 `
 
-export const LAST_MATCH_COPA_BRASIL = gql `
+export const LAST_MATCH_COPA_BRASIL = gql`
     query($teamId: ID) {
         ultimaRodadaCopaBrasil(teamId: $teamId) {
             id
             rodada
+            idCampeonato
             idEquipeMandante
             idEquipeVisitante
             idEstadio
@@ -59,11 +83,12 @@ export const LAST_MATCH_COPA_BRASIL = gql `
     }
 `
 
-export const MATCHES_BRASILEIRO = gql `
+export const MATCHES_BRASILEIRO = gql`
     {
         partidasBrasileiro {
             id
             rodada
+            idCampeonato
             idEquipeMandante
             idEquipeVisitante
             idEstadio
@@ -82,11 +107,12 @@ export const MATCHES_BRASILEIRO = gql `
     }
 `
 
-export const LAST_MATCH_BRASILEIRO = gql `
+export const LAST_MATCH_BRASILEIRO = gql`
     query($teamId: ID) {
         ultimaRodadaBrasileiro(teamId: $teamId) {
             id
             rodada
+            idCampeonato
             idEquipeMandante
             idEquipeVisitante
             idEstadio
@@ -105,26 +131,22 @@ export const LAST_MATCH_BRASILEIRO = gql `
     }
 `
 
-export const STADIUMS = gql `
+export const STADIUMS = gql`
     {
         estadios {
-            id
             nome
             cidade
             estado
-            pais
         }
     }
 `
 
-export const GET_ONE_STADIUM = gql `
+export const GET_ONE_STADIUM = gql`
     query($id: ID) {
         getEstadio(id: $id) {
-            id
             nome
             cidade
             estado
-            pais
         }
     }
 `

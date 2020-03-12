@@ -78,6 +78,39 @@ const resolvers = {
                 .catch(err => console.log(err))
             return ultimaPartidaDoTime
         },
+        confrontosCampeonato: async (_, ids) => {
+            const idPrimeiroTime = ids.idHome
+            const idSegundoTime = ids.idAway
+
+            const urlBR = apiConfig.campeonatos.Brasileiro.partidas
+            const urlCopaBr = apiConfig.campeonatos.CopaDoBrasil.partidas
+            var partidas = []
+
+            if (idPrimeiroTime !== null && idSegundoTime !== null) {
+                await axios.get(urlBR, { httpsAgent })
+                    .then(response => {
+                        const data = response.data.data
+                        data.map(p => {
+                            if ((idPrimeiroTime == p.idEquipeMandante || idPrimeiroTime == p.idEquipeVisitante) &&
+                                (idSegundoTime == p.idEquipeMandante || idSegundoTime == p.idEquipeVisitante))
+                                partidas.push(p)
+                        })
+                    })
+                    .catch(err => console.log(err))
+
+                await axios.get(urlCopaBr, { httpsAgent })
+                    .then(response => {
+                        const data = response.data.data
+                        data.map(p => {
+                            if ((idPrimeiroTime == p.idEquipeMandante || idPrimeiroTime == p.idEquipeVisitante) &&
+                                (idSegundoTime == p.idEquipeMandante || idSegundoTime == p.idEquipeVisitante))
+                                partidas.push(p)
+                        })
+                    })
+                    .catch(err => console.log(err))
+            }
+            return partidas
+        },
         estadios: async () => {
             const url = apiConfig.urlEstadios
             return await axios.get(url, { httpsAgent })

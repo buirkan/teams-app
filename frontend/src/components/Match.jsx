@@ -1,36 +1,67 @@
-import React from 'react'
+import React, { Fragment, useState } from 'react'
+import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_ONE_TEAM_BRASILEIRO } from '../queries/teamsQueries'
-import { INFO_LIGA, GET_ONE_STADIUM } from '../queries/champioshipsQueries'
 import { Loader } from './template/Loader'
-import styled from 'styled-components'
 import TeamLogo from './template/TeamLogo'
-import Condition from './template/Condition'
+import TeamDetails from './TeamDetails'
+import ChampioshipInfo from './ChampioshipInfo'
+import StadiumInfo from './StadiumInfo'
 
-const MatchLabel = styled.div`
-
-`
+const MatchLabel = styled.div``
 
 const Score = styled.div``
 
-const ChampioshipInfo = ({ id }) => {
-    const leagueInfo = useQuery(INFO_LIGA, { variables: { id: id } })
-    var responseInfo = null
+const LogoArea = styled.div`
+    display: inline-block;
+    cursor: pointer
+`
 
-    if(leagueInfo.data) {
-        responseInfo = leagueInfo.data.infoCampeonato
-        console.log(responseInfo)
+const MatchDate = ({ date }) => {
+    const formatStringNumber = (val) => ('0' + val).slice(-2)
+    const dateFormatted = `${formatStringNumber(date.dayOfMonth)}/${formatStringNumber(date.monthValue)}/
+    ${date.year}`
+    const hourFormatted = `${date.hour}:${formatStringNumber(date.minute)}`
+
+    return (
+        <Fragment>
+            <span>{dateFormatted} - {hourFormatted}</span>
+        </Fragment>
+    )
+}
+
+const DetailsLabel = (props) => {
+    const [modalDisplay, changeDisplay] = useState(false)
+    const handleChangeDisplay = (val) => changeDisplay(val)
+    const matchData = props.match
+
+    const ShowDetails = (props) => {
+        if (modalDisplay)
+            return (
+                <TeamDetails
+                    match={matchData}
+                    teamData={props.team}
+                    displayDetails={modalDisplay}
+                    handle={handleChangeDisplay} />
+            )
+        else
+            return null
     }
 
     return (
-        <label>
-            {/* <span>{responseInfo.nome}</span> */}
-            {/* <span>responseInfo.rodada</span> */}
-        </label>
+        <Fragment>
+            <ShowDetails team={props.team} />
+            <LogoArea onClick={() => handleChangeDisplay(true)}>
+                <TeamLogo team={props.team} />
+                <h4>{props.team.nome}</h4>
+            </LogoArea>
+        </Fragment>
     )
 }
 
 const Match = (props) => {
+    var responseHomeData, responseAwayData, matchData = null
+
     const homeTeam = useQuery(GET_ONE_TEAM_BRASILEIRO, {
         variables: {
             id: props.itemOfMatch.idEquipeMandante
@@ -41,46 +72,38 @@ const Match = (props) => {
             id: props.itemOfMatch.idEquipeVisitante
         }
     })
-    const stadium = useQuery(GET_ONE_STADIUM, {
-        variables: {
-            id: props.itemOfMatch.idEstadio
-        }
-    })
 
-    var responseHomeData, responseAwayData, responseStadium, matchData = null
-
-    if (homeTeam.loading || awayTeam.loading || stadium.loading)
+    if (homeTeam.loading || awayTeam.loading)
         return <Loader />
 
-    if (homeTeam.data)
+    if (homeTeam.data) {
         responseHomeData = homeTeam.data.getTimeBrasileiro
+    }
 
-    if (awayTeam.data)
+    if (awayTeam.data) {
         responseAwayData = awayTeam.data.getTimeBrasileiro
+    }
 
-    if (stadium.data)
-        responseStadium = stadium.data.getEstadio
-
-    if (homeTeam.data && awayTeam.data && stadium.data) {
+    if (homeTeam.data && awayTeam.data) {
         matchData = {
             ...props.itemOfMatch,
             equipeMandante: { ...responseHomeData },
             equipeVisitante: { ...responseAwayData },
-            estadio: { ...responseStadium }
         }
+        // action to set teams of list page on state
     }
 
     return (
         <div>
             <MatchLabel>
-                <Condition condition={!homeTeam.loading && !awayTeam.loading && !stadium.loading}>
-                    <ChampioshipInfo />
-                    <Score>
-                        <TeamLogo team={matchData.equipeMandante} />
-                        <h4>{matchData.placar.golsMandante} : {matchData.placar.golsVisitante}</h4>
-                        <TeamLogo team={matchData.equipeVisitante} />
-                    </Score>
-                </Condition>
+                <ChampioshipInfo id={matchData.idCampeonato} />
+                <Score>
+                    <DetailsLabel match={matchData} team={matchData.equipeMandante} />
+                    <h4>{matchData.placar.golsMandante} : {matchData.placar.golsVisitante}</h4>
+                    <DetailsLabel match={matchData} team={matchData.equipeVisitante} />
+                </Score>
+                <MatchDate date={matchData.dataDaPartida} />
+                <StadiumInfo idEstadio={matchData.idEstadio} />
             </MatchLabel>
         </div>
     )
