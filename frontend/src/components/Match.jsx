@@ -16,7 +16,7 @@ const Score = styled.div``
 
 const LogoArea = styled.div`
     display: inline-block;
-    cursor: pointer
+    cursor: pointer;
 `
 
 const MatchDate = ({ date }) => {
