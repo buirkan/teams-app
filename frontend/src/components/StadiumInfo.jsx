@@ -18,11 +18,15 @@ const StadiumInfo = (props) => {
             id: props.idEstadio
         }
     })
+    var stadiumInfo = null
+
+    if(stadium.data)
+        stadiumInfo = stadium.data.getEstadio[0]
 
     if (stadium.data)
         return (
             <div>
-                <StadiumData stadium={stadium.data.getEstadio[0]} />
+                <StadiumData stadium={stadiumInfo} />
             </div>
         )
     else

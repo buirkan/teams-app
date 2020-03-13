@@ -16,7 +16,6 @@ const ChampioshipInfo = ({ id }) => {
     return (
         <div>
             <span>{responseInfo.infoCampeonato.nome}</span>
-            <span>Rodada {responseInfo.infoCampeonato.rodadaAtual}</span>
         </div>
     )
 }

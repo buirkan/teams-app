@@ -20,9 +20,7 @@ export const GET_ONE_TEAM_COPA_BRASIL = gql`
             nome
             cidade
             estado
-            pais
             urlLogo
-            timeFantasia
         }
     }
 `
@@ -41,9 +39,9 @@ export const GET_TEAMS_BRASILEIRO = gql`
     }
 `
 
-export const GET_TEAMS_FAVORITO = gql`
-    {
-        timesBrasileiro {
+export const GET_ONE_TEAM_BRASILEIRO = gql`
+    query($id: ID) {
+        getTimeBrasileiro(id: $id) {
             id
             nome
             cidade
@@ -52,16 +50,15 @@ export const GET_TEAMS_FAVORITO = gql`
         }
     }
 `
-export const GET_ONE_TEAM_BRASILEIRO = gql`
-    query($id: ID) {
-        getTimeBrasileiro(id: $id) {
+
+export const GET_TEAMS_FAVORITO = gql`
+    {
+        timesBrasileiro {
             id
             nome
             cidade
             estado
-            pais
             urlLogo
-            timeFantasia
         }
     }
 `

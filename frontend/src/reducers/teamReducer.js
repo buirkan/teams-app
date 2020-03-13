@@ -7,7 +7,7 @@ export default function (state = INITIAL_STATE, action) {
         case 'FAVORITE_TEAM_ADDED':
             return { ...state, myTeam: action.payload }
         case 'REMOVE_FAVORITE_TEAM':
-            return {...state, myTeam: null}
+            return { ...state, myTeam: null }
         default:
             return state
     }

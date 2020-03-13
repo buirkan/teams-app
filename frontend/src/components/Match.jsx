@@ -1,12 +1,14 @@
 import React, { Fragment, useState } from 'react'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
-import { GET_ONE_TEAM_BRASILEIRO } from '../queries/teamsQueries'
+import { GET_ONE_TEAM_BRASILEIRO, GET_ONE_TEAM_COPA_BRASIL } from '../queries/teamsQueries'
 import { Loader } from './template/Loader'
 import TeamLogo from './template/TeamLogo'
 import TeamDetails from './TeamDetails'
 import ChampioshipInfo from './ChampioshipInfo'
 import StadiumInfo from './StadiumInfo'
+import { connect } from 'react-redux'
+import { CHAMPIOSHIPS_ID } from '../utils'
 
 const MatchLabel = styled.div``
 
@@ -60,28 +62,28 @@ const DetailsLabel = (props) => {
 }
 
 const Match = (props) => {
+    const query = props.itemOfMatch.idCampeonato === CHAMPIOSHIPS_ID.brasileiro ?
+        GET_ONE_TEAM_BRASILEIRO :
+        GET_ONE_TEAM_COPA_BRASIL
+
     var responseHomeData, responseAwayData, matchData = null
 
-    const homeTeam = useQuery(GET_ONE_TEAM_BRASILEIRO, {
-        variables: {
-            id: props.itemOfMatch.idEquipeMandante
-        }
-    })
-    const awayTeam = useQuery(GET_ONE_TEAM_BRASILEIRO, {
-        variables: {
-            id: props.itemOfMatch.idEquipeVisitante
-        }
-    })
+    const homeTeam = useQuery(query, { variables: { id: props.itemOfMatch.idEquipeMandante } })
+    const awayTeam = useQuery(query, { variables: { id: props.itemOfMatch.idEquipeVisitante } })
 
     if (homeTeam.loading || awayTeam.loading)
         return <Loader />
 
     if (homeTeam.data) {
-        responseHomeData = homeTeam.data.getTimeBrasileiro
+        responseHomeData = query === GET_ONE_TEAM_BRASILEIRO ?
+            homeTeam.data.getTimeBrasileiro :
+            homeTeam.data.getTimeCopaBrasil
     }
 
     if (awayTeam.data) {
-        responseAwayData = awayTeam.data.getTimeBrasileiro
+        responseAwayData = query === GET_ONE_TEAM_BRASILEIRO ?
+            awayTeam.data.getTimeBrasileiro :
+            awayTeam.data.getTimeCopaBrasil
     }
 
     if (homeTeam.data && awayTeam.data) {
@@ -90,13 +92,13 @@ const Match = (props) => {
             equipeMandante: { ...responseHomeData },
             equipeVisitante: { ...responseAwayData },
         }
-        // action to set teams of list page on state
     }
 
     return (
         <div>
             <MatchLabel>
                 <ChampioshipInfo id={matchData.idCampeonato} />
+                <span>Rodada {matchData.rodada}</span>
                 <Score>
                     <DetailsLabel match={matchData} team={matchData.equipeMandante} />
                     <h4>{matchData.placar.golsMandante} : {matchData.placar.golsVisitante}</h4>
@@ -109,4 +111,5 @@ const Match = (props) => {
     )
 }
 
-export default Match
+const mapStateToProps = (state) => ({ idLeague: state.league.idChampioship })
+export default connect(mapStateToProps, null)(Match)

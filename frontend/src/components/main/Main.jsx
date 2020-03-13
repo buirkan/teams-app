@@ -3,9 +3,9 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
-import FavoriteTeam from '../FavoriteTeam'
 import { setMyTeam } from '../../actions/teamActions'
 import Home from '../Home'
+import FavoriteTeam from '../FavoriteTeam'
 import ChampioshipList from '../ChampioshipList'
 
 const client = new ApolloClient({
@@ -32,14 +32,16 @@ const Main = (props) => {
             <div className="App">
                 <BrowserRouter>
                     <Switch>
-                        <Route path="/" exact>
+                        <Route path="/" exact={true}>
                             {CheckFavoriteStatus() ? <Home /> : <FavoriteTeam />}
                         </Route>
                         <Route path="/home">
                             <Home />
                         </Route>
-                        <Route path="/brasileiro" component={ChampioshipList} />
-                        <Route path="/copaBrasil" component={ChampioshipList} />
+                        <Route path="/timeFavorito">
+                            <FavoriteTeam />
+                        </Route>
+                        <Route path="/campeonato" component={ChampioshipList} />
                         <Redirect from="*" to='/' />
                     </Switch>
                 </BrowserRouter>

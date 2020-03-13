@@ -20,8 +20,10 @@ const HomePage = (props) => {
     return (
         <div>
             <Header team={props.myTeam} large={true} />
-            <Condition condition={!lastMatchBr.loading && !lastMatchCb.loading}>
+            <Condition condition={respLastMatchBr}>
                 <Match itemOfMatch={respLastMatchBr} />
+            </Condition>
+            <Condition condition={respLastMatchCb}>
                 <Match itemOfMatch={respLastMatchCb} />
             </Condition>
         </div>

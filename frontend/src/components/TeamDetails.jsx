@@ -5,7 +5,8 @@ import { CONFRONTOS_LIGA, INFO_LIGA } from '../queries/champioshipsQueries'
 import { Loader } from './template/Loader'
 import TeamLogo from './template/TeamLogo'
 import StadiumInfo from './StadiumInfo'
-import { GET_ONE_TEAM_BRASILEIRO } from '../queries/teamsQueries'
+import { GET_ONE_TEAM_BRASILEIRO, GET_ONE_TEAM_COPA_BRASIL } from '../queries/teamsQueries'
+import { CHAMPIOSHIPS_ID } from '../utils'
 
 const ModalBg = styled.div`
     position: fixed;
@@ -52,20 +53,21 @@ const CloseButton = styled.button`
     };
 `
 
-const TeamInfo = ({ teamId }) => {
-    var teamData = null
+const TeamInfo = ({ teamId, leagueId }) => {
+    const query = leagueId === CHAMPIOSHIPS_ID.brasileiro ?
+        GET_ONE_TEAM_BRASILEIRO :
+        GET_ONE_TEAM_COPA_BRASIL
 
-    const getTeamData = useQuery(GET_ONE_TEAM_BRASILEIRO, {
-        variables: {
-            id: teamId
-        }
-    })
+    const getTeamData = useQuery(query, { variables: { id: teamId } })
+    var teamData = null
 
     if (getTeamData.loading)
         return <Loader />
 
     if (getTeamData.data)
-        teamData = getTeamData.data.getTimeBrasileiro
+        teamData = query === GET_ONE_TEAM_BRASILEIRO ?
+            getTeamData.data.getTimeBrasileiro :
+            getTeamData.data.getTimeCopaBrasil
 
     return (
         <Fragment>
@@ -83,7 +85,7 @@ const ActualLeagueInfo = (props) => {
 
     return (
         <div>
-            <span>{info.nome}</span>
+            <span>{info}</span>
             <span>Rodada: {props.actualRound}</span>
         </div>
     )
@@ -129,9 +131,9 @@ const DetailContent = (props) => {
                 <div key={m.id}>
                     <ActualLeagueInfo idLeague={m.idCampeonato} actualRound={m.rodada} />
                     <div>
-                        <TeamInfo teamId={m.idEquipeMandante} />
+                        <TeamInfo teamId={m.idEquipeMandante} leagueId={m.idCampeonato} />
                         <h4>{m.placar.golsMandante} : {m.placar.golsVisitante}</h4>
-                        <TeamInfo teamId={m.idEquipeVisitante} />
+                        <TeamInfo teamId={m.idEquipeVisitante} leagueId={m.idCampeonato} />
                     </div>
                     <StadiumInfo idEstadio={m.idEstadio} />
                 </div>
