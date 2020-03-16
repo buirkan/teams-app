@@ -1,3 +1,3 @@
-const Loading = (props) => props.condition ? props.children : false
+const Condition = (props) => props.condition ? props.children : false
 
-export default Loading
+export default Condition

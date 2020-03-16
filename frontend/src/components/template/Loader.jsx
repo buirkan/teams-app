@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled, { keyframes } from 'styled-components'
 
 const rotate = keyframes`
@@ -23,11 +23,20 @@ const Spinner = styled.div`
     border-right-color:rgba(255,255,255, 0.3);
     -webkit-animation: ${rotate} 1s ease-in-out infinite;
     animation: ${rotate} 1s ease-in-out infinite;
+    position: relative;
 `
+
+const SpinnerLabel = styled.div`
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: block;
+`
+
 const Loader = () => (
-    <Fragment>
+    <SpinnerLabel>
         <Spinner />
-    </Fragment>
+    </SpinnerLabel>
 )
 
 export { Loader }

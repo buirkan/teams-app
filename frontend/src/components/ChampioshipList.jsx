@@ -1,11 +1,12 @@
-import React, { Fragment } from 'react'
-import { useQuery } from '@apollo/react-hooks'
-import ReactPaginate from 'react-paginate'
-import { Loader } from './template/Loader'
-import { MATCHES_BRASILEIRO, MATCHES_COPA_BRASIL } from '../queries/champioshipsQueries'
-import Match from './Match'
-import { CHAMPIOSHIPS_ID } from '../utils'
+import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
+import { useQuery } from '@apollo/react-hooks'
+import { MATCHES_BRASILEIRO, MATCHES_COPA_BRASIL } from '../queries/champioshipsQueries'
+import { CHAMPIOSHIPS_ID } from '../utils'
+import { Loader } from './template/Loader'
+import Pagination from './template/Pagination'
+import Header from './template/Header'
+import Match from './Match'
 
 const MatchesList = (props) => {
     const matches = props.matches.map(m => {
@@ -22,33 +23,46 @@ const MatchesList = (props) => {
     )
 }
 
-const ChampioshipList = ({ idLeague }) => {
-    const queryList = idLeague === CHAMPIOSHIPS_ID.brasileiro ? MATCHES_BRASILEIRO : MATCHES_COPA_BRASIL
-    const matches = useQuery(queryList)
-    var matchesResponse = null
+const ChampioshipList = ({ idLeague, myTeam }) => {
+    const [currentPage, setCurrentPage] = useState(1)
+    const [matchesPerPage, setMatchesPerPage] = useState()
 
-    if (matches.loading)
+    const queryList = idLeague === CHAMPIOSHIPS_ID.brasileiro ? MATCHES_BRASILEIRO : MATCHES_COPA_BRASIL
+    const { loading, data } = useQuery(queryList)
+
+    const indexOfLastMatch = currentPage * matchesPerPage
+    const indexOfFirstMatch = indexOfLastMatch - matchesPerPage
+    
+    var matchesResponse, currentMatches = null
+
+    useEffect(() => {
+        setMatchesPerPage(10)
+    }, [])
+
+    const pager = (pageNumber) => setCurrentPage(pageNumber)
+
+    if (loading)
         return <Loader />
 
-    if (matches.error)
-        return console.error(`Falha na requisição ${matches.error.message}`)
+    if (data) {
+        matchesResponse = idLeague === CHAMPIOSHIPS_ID.brasileiro ?
+            data.partidasBrasileiro :
+            data.partidasCopaBrasil
 
-    if (matches.data)
-        matchesResponse = idLeague === CHAMPIOSHIPS_ID.brasileiro ? 
-            matches.data.partidasBrasileiro : 
-            matches.data.partidasCopaBrasil
+        currentMatches = matchesResponse.slice(indexOfFirstMatch, indexOfLastMatch)
+    }
 
     return (
         <Fragment>
-            <MatchesList matches={matchesResponse} />
-            <ReactPaginate
-                previousLabel={'previous'}
-                nextLabel={'next'}
-                breakLabel={'...'}
-            />
+            <Header team={myTeam} large={true} />
+            <MatchesList matches={currentMatches} />
+            <Pagination itemsPerPage={matchesPerPage} totalItems={matchesResponse.length} paginate={pager} />
         </Fragment>
     )
 }
 
-const mapStateToProps = (state) => ({ idLeague: state.league.idChampioship })
+const mapStateToProps = (state) => ({
+    idLeague: state.league.idChampioship,
+    myTeam: state.team.myTeam
+})
 export default connect(mapStateToProps, null)(ChampioshipList)

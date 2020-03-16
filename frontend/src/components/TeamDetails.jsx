@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import { useQuery } from '@apollo/react-hooks'
-import { CONFRONTOS_LIGA, INFO_LIGA } from '../queries/champioshipsQueries'
 import { Loader } from './template/Loader'
 import TeamLogo from './template/TeamLogo'
 import StadiumInfo from './StadiumInfo'
+import { CONFRONTOS_LIGA, INFO_LIGA } from '../queries/champioshipsQueries'
 import { GET_ONE_TEAM_BRASILEIRO, GET_ONE_TEAM_COPA_BRASIL } from '../queries/teamsQueries'
 import { CHAMPIOSHIPS_ID } from '../utils'
 

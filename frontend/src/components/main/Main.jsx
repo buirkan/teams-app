@@ -13,7 +13,7 @@ const client = new ApolloClient({
 })
 
 const Main = (props) => {
-    const favoriteAction = props.setFavoriteTeam
+    const setMyTeam = props.setFavoriteTeam
 
     const CheckFavoriteStatus = () => {
         const favoriteTeamSelected = JSON.parse(localStorage.getItem('favoriteTeam'))
@@ -22,7 +22,7 @@ const Main = (props) => {
             return false
         }
         else {
-            favoriteAction(favoriteTeamSelected)
+            setMyTeam(favoriteTeamSelected)
             return true
         }
     }
@@ -50,9 +50,8 @@ const Main = (props) => {
     )
 }
 
-const mapStateToProps = (state) => ({ myTeam: state.myTeam })
 const mapDispatchToProps = (dispatch) => ({
     setFavoriteTeam: (t) => dispatch(setMyTeam(t))
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Main)
+export default connect(null, mapDispatchToProps)(Main)

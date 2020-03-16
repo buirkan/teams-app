@@ -1,4 +1,4 @@
-import {combineReducers} from 'redux'
+import { combineReducers } from 'redux'
 import teamReducer from './teamReducer'
 import champioshipReducer from './champioshipReducer'
 

@@ -73,7 +73,9 @@ const Header = (props) => {
     const removeMyTeam = props.clearMyTeam
     return (
         <Nav>
-            <TeamLogo large={true} team={props.team} />
+            <Link to="/home">
+                <TeamLogo large={true} team={props.team} />
+            </Link>
             <Title>{props.team.nome}</Title>
             <ChangeFavoriteTeam action={removeMyTeam} />
             <Leagues leagueSelection={setLeagueSelected} />
