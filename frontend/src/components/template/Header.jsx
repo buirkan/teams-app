@@ -27,8 +27,6 @@ const Leagues = (props) => {
     const handleSelectLeague = (optionId) => {
         var leagueId = null
 
-        console.log(optionId)
-
         if (optionId === CHAMPIOSHIPS_ID.brasileiro)
             leagueId = CHAMPIOSHIPS_ID.brasileiro
         else if (optionId === CHAMPIOSHIPS_ID.copaBrasil)

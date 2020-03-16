@@ -34,7 +34,9 @@ const ChampioshipList = ({ idLeague }) => {
         return console.error(`Falha na requisição ${matches.error.message}`)
 
     if (matches.data)
-        matchesResponse = matches.data.partidasBrasileiro
+        matchesResponse = idLeague === CHAMPIOSHIPS_ID.brasileiro ? 
+            matches.data.partidasBrasileiro : 
+            matches.data.partidasCopaBrasil
 
     return (
         <Fragment>
