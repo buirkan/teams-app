@@ -26,28 +26,21 @@ const resolvers = {
                 .then(response => response.data.data)
                 .catch(err => console.log(err))
         },
-        ultimaRodadaCopaBrasil: async (_, { teamId }) => {
+        ultimasRodadasCopaBrasil: async (_, { teamId }) => {
             const url = apiConfig.campeonatos.CopaDoBrasil.partidas
-            var ultimaPartidaDoTime = null
+            var ultimasPartidaDoTime = []
 
             await axios.get(url, { httpsAgent })
                 .then(response => {
                     let matches = response.data.data
-                    var rodadaUltimaPartida = null
 
                     matches.map(match => {
-                        if (rodadaUltimaPartida === null)
-                            rodadaUltimaPartida = match.rodada
-
-                        if (match.rodada >= rodadaUltimaPartida && (match.idEquipeMandante == teamId ||
-                            match.idEquipeVisitante == teamId)) {
-                            rodadaUltimaPartida = match.rodada
-                            ultimaPartidaDoTime = match
-                        }
+                        if (match.idEquipeMandante == teamId || match.idEquipeVisitante == teamId)
+                            ultimasPartidaDoTime.push(match)
                     })
                 })
                 .catch(err => console.log(err))
-            return ultimaPartidaDoTime
+            return ultimasPartidaDoTime
         },
         partidasBrasileiro: async () => {
             const url = apiConfig.campeonatos.Brasileiro.partidas
@@ -55,28 +48,21 @@ const resolvers = {
                 .then(response => response.data.data)
                 .catch(err => console.log(err))
         },
-        ultimaRodadaBrasileiro: async (_, { teamId }) => {
+        ultimasRodadasBrasileiro: async (_, { teamId }) => {
             const url = apiConfig.campeonatos.Brasileiro.partidas
-            var ultimaPartidaDoTime = null
+            var ultimasPartidaDoTime = []
 
             await axios.get(url, { httpsAgent })
                 .then(response => {
                     let matches = response.data.data
-                    var rodadaUltimaPartida = null
 
                     matches.map(match => {
-                        if (rodadaUltimaPartida === null)
-                            rodadaUltimaPartida = match.rodada
-
-                        if (match.rodada >= rodadaUltimaPartida && (match.idEquipeMandante == teamId ||
-                            match.idEquipeVisitante == teamId)) {
-                            rodadaUltimaPartida = match.rodada
-                            ultimaPartidaDoTime = match
-                        }
+                        if (match.idEquipeMandante == teamId || match.idEquipeVisitante == teamId)
+                            ultimasPartidaDoTime.push(match)
                     })
                 })
                 .catch(err => console.log(err))
-            return ultimaPartidaDoTime
+            return ultimasPartidaDoTime
         },
         confrontosCampeonato: async (_, ids) => {
             const idPrimeiroTime = ids.idHome

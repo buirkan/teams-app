@@ -1,33 +1,18 @@
 import React, { Fragment, useState, useEffect } from 'react'
 import { connect } from 'react-redux'
 import { useQuery } from '@apollo/react-hooks'
+import Pagination from 'rc-pagination'
 import { MATCHES_BRASILEIRO, MATCHES_COPA_BRASIL } from '../queries/champioshipsQueries'
 import { CHAMPIOSHIPS_ID } from '../utils'
 import { Loader } from './template/Loader'
-import Pagination from './template/Pagination'
 import Header from './template/Header'
-import Match from './Match'
+import MatchesList from './MatchesList'
 
-const MatchesList = (props) => {
-    const matches = props.matches.map(m => {
-        return (
-            <li key={m.id}>
-                <Match itemOfMatch={m} />
-            </li>
-        )
-    })
-    return (
-        <ul>
-            {matches}
-        </ul>
-    )
-}
-
-const ChampioshipList = ({ idLeague, myTeam }) => {
+const ChampioshipList = (props) => {
     const [currentPage, setCurrentPage] = useState(1)
-    const [matchesPerPage, setMatchesPerPage] = useState()
+    const [matchesPerPage, setMatchesPerPage] = useState(10)
 
-    const queryList = idLeague === CHAMPIOSHIPS_ID.brasileiro ? MATCHES_BRASILEIRO : MATCHES_COPA_BRASIL
+    const queryList = props.idLeague === CHAMPIOSHIPS_ID.brasileiro ? MATCHES_BRASILEIRO : MATCHES_COPA_BRASIL
     const { loading, data } = useQuery(queryList)
 
     const indexOfLastMatch = currentPage * matchesPerPage
@@ -39,29 +24,35 @@ const ChampioshipList = ({ idLeague, myTeam }) => {
         setMatchesPerPage(10)
     }, [])
 
-    const pager = (pageNumber) => setCurrentPage(pageNumber)
-
     if (loading)
         return <Loader />
 
     if (data) {
-        matchesResponse = idLeague === CHAMPIOSHIPS_ID.brasileiro ?
-            data.partidasBrasileiro :
-            data.partidasCopaBrasil
+        matchesResponse = props.idLeague === CHAMPIOSHIPS_ID.brasileiro 
+            ? data.partidasBrasileiro 
+            : data.partidasCopaBrasil
 
         currentMatches = matchesResponse.slice(indexOfFirstMatch, indexOfLastMatch)
+
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        })
     }
+
+    const handleOnChange = (e) => setCurrentPage(e)
 
     return (
         <Fragment>
-            <Header team={myTeam} large={true} />
+            <Header team={props.myTeam} large={true} />
             <MatchesList matches={currentMatches} />
-            <Pagination itemsPerPage={matchesPerPage} totalItems={matchesResponse.length} paginate={pager} />
+            <Pagination total={matchesResponse.length} pageSize={matchesPerPage} onChange={handleOnChange} />
         </Fragment>
     )
 }
 
-const mapStateToProps = (state) => ({
+export const mapStateToProps = (state) => ({
     idLeague: state.league.idChampioship,
     myTeam: state.team.myTeam
 })

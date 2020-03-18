@@ -17,10 +17,10 @@ const Spinner = styled.div`
     padding:0px;
     border-radius:100%;
     border:5px solid;
-    border-top-color:rgba(246, 36, 89, 1);
-    border-bottom-color:rgba(255,255,255, 0.3);
-    border-left-color:rgba(246, 36, 89, 1);
-    border-right-color:rgba(255,255,255, 0.3);
+    border-top-color: hsl(156, 62%, 56%);
+    border-bottom-color: hsla(0, 0%, 100%, 0.3);
+    border-left-color: hsl(156, 58%, 54%);
+    border-right-color: hsla(0, 0%, 100%, 0.3);
     -webkit-animation: ${rotate} 1s ease-in-out infinite;
     animation: ${rotate} 1s ease-in-out infinite;
     position: relative;

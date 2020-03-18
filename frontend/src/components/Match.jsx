@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react'
-import styled from 'styled-components'
+import { connect } from 'react-redux'
 import { useQuery } from '@apollo/react-hooks'
 import { GET_ONE_TEAM_BRASILEIRO, GET_ONE_TEAM_COPA_BRASIL } from '../queries/teamsQueries'
 import { Loader } from './template/Loader'
@@ -7,17 +7,10 @@ import TeamLogo from './template/TeamLogo'
 import TeamDetails from './TeamDetails'
 import ChampioshipInfo from './ChampioshipInfo'
 import StadiumInfo from './StadiumInfo'
-import { connect } from 'react-redux'
 import { CHAMPIOSHIPS_ID } from '../utils'
-
-const MatchLabel = styled.div``
-
-const Score = styled.div``
-
-const LogoArea = styled.div`
-    display: inline-block;
-    cursor: pointer;
-`
+import { LogoArea } from './template/styled/LogoArea'
+import { MatchLabel } from './template/styled/MatchLabel'
+import { Score, ScoreLabel } from './template/styled/ScoreLabel'
 
 const MatchDate = ({ date }) => {
     const formatStringNumber = (val) => ('0' + val).slice(-2)
@@ -27,7 +20,7 @@ const MatchDate = ({ date }) => {
 
     return (
         <Fragment>
-            <span>{dateFormatted} - {hourFormatted}</span>
+            <h6>{dateFormatted} - {hourFormatted}</h6>
         </Fragment>
     )
 }
@@ -54,7 +47,7 @@ const DetailsLabel = (props) => {
         <Fragment>
             <ShowDetails team={props.team} />
             <LogoArea onClick={() => handleChangeDisplay(true)}>
-                <TeamLogo team={props.team} />
+                <TeamLogo team={props.team} largeImage={true} />
                 <h4>{props.team.nome}</h4>
             </LogoArea>
         </Fragment>
@@ -75,15 +68,15 @@ const Match = (props) => {
         return <Loader />
 
     if (homeTeam.data) {
-        responseHomeData = query === GET_ONE_TEAM_BRASILEIRO ?
-            homeTeam.data.getTimeBrasileiro :
-            homeTeam.data.getTimeCopaBrasil
+        responseHomeData = query === GET_ONE_TEAM_BRASILEIRO
+            ? homeTeam.data.getTimeBrasileiro
+            : homeTeam.data.getTimeCopaBrasil
     }
 
     if (awayTeam.data) {
-        responseAwayData = query === GET_ONE_TEAM_BRASILEIRO ?
-            awayTeam.data.getTimeBrasileiro :
-            awayTeam.data.getTimeCopaBrasil
+        responseAwayData = query === GET_ONE_TEAM_BRASILEIRO
+            ? awayTeam.data.getTimeBrasileiro
+            : awayTeam.data.getTimeCopaBrasil
     }
 
     if (homeTeam.data && awayTeam.data) {
@@ -95,18 +88,24 @@ const Match = (props) => {
     }
 
     return (
-        <div>
-            <MatchLabel>
-                <ChampioshipInfo id={matchData.idCampeonato} />
-                <span>Rodada {matchData.rodada}</span>
-                <Score>
-                    <DetailsLabel match={matchData} team={matchData.equipeMandante} />
-                    <h4>{matchData.placar.golsMandante} : {matchData.placar.golsVisitante}</h4>
-                    <DetailsLabel match={matchData} team={matchData.equipeVisitante} />
-                </Score>
-                <MatchDate date={matchData.dataDaPartida} />
-                <StadiumInfo idEstadio={matchData.idEstadio} />
-            </MatchLabel>
+        <div className='container'>
+            <div style={{ textAlign: '-webkit-center', zIndex: '-1' }} className="justify-content-lg-center">
+                <MatchLabel className='col-lg-10 col-md-10 col-sm-10 col-10'>
+                    <ChampioshipInfo id={matchData.idCampeonato} />
+                    <div className="col-12">
+                        <h6>Rodada {matchData.rodada}</h6>
+                    </div>
+                    <Score>
+                        <DetailsLabel match={matchData} team={matchData.equipeMandante} />
+                        <ScoreLabel>
+                            <h1>{matchData.placar.golsMandante} : {matchData.placar.golsVisitante}</h1>
+                        </ScoreLabel>
+                        <DetailsLabel match={matchData} team={matchData.equipeVisitante} />
+                    </Score>
+                    <MatchDate date={matchData.dataDaPartida} />
+                    <StadiumInfo idEstadio={matchData.idEstadio} />
+                </MatchLabel>
+            </div>
         </div>
     )
 }

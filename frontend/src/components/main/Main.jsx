@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import { ApolloProvider } from 'react-apollo'
 import ApolloClient from 'apollo-boost'
 import { setMyTeam } from '../../actions/teamActions'
-import Home from '../Home'
 import FavoriteTeam from '../FavoriteTeam'
 import ChampioshipList from '../ChampioshipList'
+import Home from '../Home'
 
 const client = new ApolloClient({
     uri: 'http://localhost:4004/'

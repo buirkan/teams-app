@@ -59,9 +59,9 @@ export const MATCHES_COPA_BRASIL = gql`
     }
 `
 
-export const LAST_MATCH_COPA_BRASIL = gql`
+export const LAST_MATCHES_COPA_BRASIL = gql`
     query($teamId: ID) {
-        ultimaRodadaCopaBrasil(teamId: $teamId) {
+        ultimasRodadasCopaBrasil(teamId: $teamId) {
             id
             rodada
             idCampeonato
@@ -107,9 +107,9 @@ export const MATCHES_BRASILEIRO = gql`
     }
 `
 
-export const LAST_MATCH_BRASILEIRO = gql`
+export const LAST_MATCHES_BRASILEIRO = gql`
     query($teamId: ID) {
-        ultimaRodadaBrasileiro(teamId: $teamId) {
+        ultimasRodadasBrasileiro(teamId: $teamId) {
             id
             rodada
             idCampeonato

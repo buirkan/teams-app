@@ -4,15 +4,20 @@ import { useQuery } from '@apollo/react-hooks'
 import { Loader } from './template/Loader'
 import TeamLogo from './template/TeamLogo'
 import StadiumInfo from './StadiumInfo'
-import { CONFRONTOS_LIGA, INFO_LIGA } from '../queries/champioshipsQueries'
+import ChampioshipInfo from './ChampioshipInfo'
+import { CONFRONTOS_LIGA } from '../queries/champioshipsQueries'
 import { GET_ONE_TEAM_BRASILEIRO, GET_ONE_TEAM_COPA_BRASIL } from '../queries/teamsQueries'
 import { CHAMPIOSHIPS_ID } from '../utils'
+import { CloseButton, CloseIcon } from './template/styled/CloseButton'
+import { LogoArea } from './template/styled/LogoArea'
+import { ScoreLabel } from './template/styled/ScoreLabel'
 
 const ModalBg = styled.div`
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    z-index: 1;
     cursor: default;
     height: 100%;
     background: hsla(0, 0%, 22%, 0.6);
@@ -36,21 +41,14 @@ const DetailModal = styled.div`
     display: 'block';
 `
 
-const CloseButton = styled.button`
-    float: right;
-    cursor: pointer;
-    margin-right: 2%;
-    margin-top: 0.5rem;
-    border-radius: 50%;
-    height: 45px;
-    width: 45px;
-    border: 5px double hsl(0, 0%, 27%);
-    transition: all 0.15s ease;
-    transform: scale(1);
-    z-index: 1;
-    &:hover {
-        transform: scale(1.1) perspective(0.8px);
-    };
+const CloseArea = styled.div`
+    display: -webkit-box;
+`
+
+const TeamName = styled.div`
+    display: inline-block;
+    margin-left: 3rem;
+    vertical-align: bottom;
 `
 
 const TeamInfo = ({ teamId, leagueId }) => {
@@ -71,23 +69,10 @@ const TeamInfo = ({ teamId, leagueId }) => {
 
     return (
         <Fragment>
-            <TeamLogo team={teamData} />
+            <LogoArea>
+                <TeamLogo team={teamData} largeImage={true} />
+            </LogoArea>
         </Fragment>
-    )
-}
-
-const ActualLeagueInfo = (props) => {
-    const leagueInfo = useQuery(INFO_LIGA, { variables: { id: props.idLeague } })
-    var info
-
-    if (leagueInfo.data)
-        info = leagueInfo.data.infoCampeonato.nome
-
-    return (
-        <div>
-            <span>{info}</span>
-            <span>Rodada: {props.actualRound}</span>
-        </div>
     )
 }
 
@@ -112,30 +97,40 @@ const DetailContent = (props) => {
         matches = matchesQuery.data.confrontosCampeonato
 
         matches.forEach(match => {
-            match.equipeMandante = match.idEquipeMandante === teamHomeId ?
-                homePageTeamHome :
-                homePageTeamAway
-            match.equipeVisitante = match.idEquipeMandante === teamHomeId ?
-                homePageTeamAway :
-                homePageTeamHome
+            match.equipeMandante = match.idEquipeMandante === teamHomeId
+                ? homePageTeamHome
+                : homePageTeamAway
+            match.equipeVisitante = match.idEquipeMandante === teamHomeId
+                ? homePageTeamAway
+                : homePageTeamHome
         })
     }
 
     return (
         <Fragment>
-            <TeamLogo team={props.team} />
-            <h1>{props.team.nome}</h1>
-            <h4>{props.team.cidade} / {props.team.estado}</h4>
-            <hr />
+            <span style={{ marginTop: '-45px', display: 'block' }}>
+                <TeamLogo team={props.team} largeImage={true} />
+                <TeamName>
+                    <h1>{props.team.nome}</h1>
+                    <h4>{props.team.cidade} / {props.team.estado}</h4>
+                </TeamName>
+            </span>
+            <hr className='m-4' />
             {matches.map(m => (
                 <div key={m.id}>
-                    <ActualLeagueInfo idLeague={m.idCampeonato} actualRound={m.rodada} />
+                    <ChampioshipInfo id={m.idCampeonato} />
+                    <div className="col-12">
+                        <h6>Rodada {m.rodada}</h6>
+                    </div>
                     <div>
                         <TeamInfo teamId={m.idEquipeMandante} leagueId={m.idCampeonato} />
-                        <h4>{m.placar.golsMandante} : {m.placar.golsVisitante}</h4>
+                        <ScoreLabel>
+                            <h3>{m.placar.golsMandante} : {m.placar.golsVisitante}</h3>
+                        </ScoreLabel>
                         <TeamInfo teamId={m.idEquipeVisitante} leagueId={m.idCampeonato} />
                     </div>
                     <StadiumInfo idEstadio={m.idEstadio} />
+                    <hr className='mb-3' />
                 </div>
             ))}
         </Fragment>
@@ -147,7 +142,11 @@ const TeamDetails = (props) => (
         <div style={{ display: props.displayDetails ? 'block' : 'none' }}>
             <ModalBg onClick={() => props.handle(false)} />
             <DetailModal>
-                <CloseButton onClick={() => props.handle(false)} />
+                <CloseArea>
+                    <CloseButton onClick={() => props.handle(false)}>
+                        <CloseIcon className='fa fa-close'></CloseIcon>
+                    </CloseButton>
+                </CloseArea>
                 <DetailContent team={props.teamData} match={props.match} />
             </DetailModal>
         </div>

@@ -7,7 +7,7 @@ const StadiumData = ({ stadium }) => {
 
     return (
         <Fragment>
-            <span>{formattedData}</span>
+            <h6>{formattedData}</h6>
         </Fragment>
     )
 }

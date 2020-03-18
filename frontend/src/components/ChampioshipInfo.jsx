@@ -14,8 +14,8 @@ const ChampioshipInfo = ({ id }) => {
         responseInfo = leagueInfo.data
 
     return (
-        <div>
-            <span>{responseInfo.infoCampeonato.nome}</span>
+        <div className='col-12'>
+            <h5>{responseInfo.infoCampeonato.nome}</h5>
         </div>
     )
 }

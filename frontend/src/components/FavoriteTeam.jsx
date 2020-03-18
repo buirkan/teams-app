@@ -14,6 +14,9 @@ const TeamButton = styled.button`
     min-width: 11rem;
     border: 2px solid #b3b3b3;
     border-radius: 25px;
+    &:focus {
+        outline: none;
+    };
 `
 const TeamItem = ({ team, addFavoriteAction }) => {
     const altText = `Logo do time ${team.nome}`
