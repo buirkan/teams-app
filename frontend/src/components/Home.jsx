@@ -9,27 +9,29 @@ import MatchesList from './MatchesList'
 import { CHAMPIOSHIPS_ID } from '../utils'
 import { ChangePage } from '../actions/champioshipsActions'
 
+/**
+ * Componente da página principal.
+ *
+ */
 const HomePage = (props) => {
-    const [currentPage, setCurrentPage] = useState(1)
     const [matchesPerPage, setMatchesPerPage] = useState(10)
     const lastMatchBr = useQuery(LAST_MATCHES_BRASILEIRO, { variables: { teamId: props.myTeam.id } })
     const lastMatchCb = useQuery(LAST_MATCHES_COPA_BRASIL, { variables: { teamId: props.myTeam.id } })
     const leagueId = props.leagueToShow ? props.leagueToShow : CHAMPIOSHIPS_ID.brasileiro
     var respLastMatchBr, respLastMatchCb, matchesOfLeague, currentMatches = null
 
-    const indexOfLastMatch = currentPage * matchesPerPage
+    const indexOfLastMatch = props.leaguePage * matchesPerPage
     const indexOfFirstMatch = indexOfLastMatch - matchesPerPage
 
     useEffect(() => {
         props.changePage(props.leaguePage)
-        setCurrentPage(props.leaguePage)
         setMatchesPerPage(6)
 
         if (respLastMatchBr && respLastMatchCb) {
             matchesOfLeague = leagueId === CHAMPIOSHIPS_ID.brasileiro ? respLastMatchBr : respLastMatchCb
             currentMatches = matchesOfLeague.slice(indexOfFirstMatch, indexOfLastMatch)
         }
-    }, [respLastMatchBr, respLastMatchCb, props, currentMatches])
+    }, [respLastMatchBr, respLastMatchCb, props, currentMatches, matchesOfLeague])
 
     if (lastMatchBr.loading || lastMatchCb.loading)
         return <Loader />
@@ -51,10 +53,7 @@ const HomePage = (props) => {
         })
     }
 
-    const handleOnChange = (e) => {
-        setCurrentPage(e)
-        props.changePage(e)
-    }
+    const handleOnChange = (e) => props.changePage(e)
 
     return (
         <div>

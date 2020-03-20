@@ -18,6 +18,13 @@ const TeamButton = styled.button`
         outline: none;
     };
 `
+
+/**
+ * Componente de um time
+ *
+ * @team time para ser renderizado em tela
+ * @addFavoriteAction ação para selecionar um time X como favorito
+ */
 const TeamItem = ({ team, addFavoriteAction }) => {
     const altText = `Logo do time ${team.nome}`
 
@@ -39,6 +46,10 @@ const TeamItem = ({ team, addFavoriteAction }) => {
     )
 }
 
+/**
+ * Componente para a seleção do time favorito.
+ *
+ */
 const FavoriteTeam = (props) => {
     const { loading, error, data } = useQuery(GET_TEAMS_FAVORITO)
     const addFavoriteAction = props.myTeamAction
@@ -56,7 +67,9 @@ const FavoriteTeam = (props) => {
     return (
         <div className='container'>
             <div className="row">
-                <h1 className='display-4'>Selecione o seu time do coração</h1>
+                <div className="text-center">
+                    <h1 className='display-4 mb-5 mt-3'>Selecione o seu time do coração</h1>
+                </div>
                 <div className='col-md-12'>
                     {teams.map(team => (
                         <TeamItem addFavoriteAction={addFavoriteAction} key={team.id} team={team} />

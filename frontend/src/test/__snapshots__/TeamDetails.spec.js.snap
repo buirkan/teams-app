@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The display of element Should not regress 1`] = `
+<div
+  style={
+    Object {
+      "display": "block",
+    }
+  }
+>
+  <div
+    className="sc-Axmtr isXIHw"
+    onClick={[Function]}
+  />
+  <div
+    className="sc-AxmLO iDEBFv"
+  >
+    <div
+      className="sc-fzozJi dttkYc"
+    >
+      <button
+        className="sc-AxiKw cVTIhl"
+        onClick={[Function]}
+      >
+        <i
+          className="sc-AxhCb eFYyQU fa fa-close"
+        />
+      </button>
+    </div>
+    <div
+      className="sc-AxirZ dnNJqn"
+    >
+      <div
+        className="sc-AxjAm jAqCDh"
+      />
+    </div>
+  </div>
+</div>
+`;

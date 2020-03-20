@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import TeamLogo from './TeamLogo'
 import { connect } from 'react-redux'
@@ -23,17 +23,32 @@ const Title = styled.h1`
 `
 
 const ButtonOptions = styled.button`
-    padding: 1.3rem;
+    padding: 0.7rem;
     border-radius: 10px;
-    background-color: #3C70D9;
-    border: 2px solid whitesmoke;
-    color: whitesmoke;
+    display: inline-block;
+    position: relative;
+    max-height: 4.6em;
+    overflow: hidden;
+    min-height: 4.6rem;
+    min-width: -webkit-fill-available;
+    background-color: ${props => props.active ? '#49D49D;' : 'hsla(0,0%,0%,0);'}
+    text-overflow: ellipsis;
+    white-space: pre-wrap;
+    border: 2px solid hsl(0,0%,96%);
+    color: hsl(0,0%,96%);
     font-weight: 500;
+    -webkit-transition: all 0.15s ease;
+    -webkit-transition: all 0.15s ease;
     -webkit-transition: all 0.15s ease;
     transition: all 0.15s ease;
     &:hover {
         background-color: #49D49D;
+        color: whitesmoke;
     };
+    @media (min-width: 978px) {
+        max-height: 3rem;
+        min-height: 3rem;
+    }
 `
 
 const LeagueSelect = styled.select`
@@ -52,8 +67,29 @@ const HeaderDivisor = styled.hr`
     border-top: 2px solid rgba(0,0,0,.1);
 `
 
-const Leagues = (props) => {
-    const setLeague = props.leagueSelection
+/**
+ * Cabeçalho do sistema, contendo botões de opções e de navegações entre listas de partidas
+ *
+ */
+const Header = (props) => {
+    const changeLeagueMatches = props.changeLeagueMatches
+    const setLeagueSelected = props.setChampioship
+    const removeMyTeam = props.clearMyTeam
+    const changePagination = props.changePage
+    const onLeagueId = props.league
+
+    const handleResetPagination = () => changePagination(1)
+
+    const handleOnChangeLeague = (e) => {
+        const leagueId = e.target.value
+        handleResetPagination()
+        changeLeagueMatches(leagueId)
+    }
+
+    const handleChangeFavTeam = () => {
+        localStorage.removeItem('favoriteTeam')
+        removeMyTeam()
+    }
 
     const handleSelectLeague = (optionId) => {
         var leagueId = null
@@ -63,60 +99,17 @@ const Leagues = (props) => {
         else if (optionId === CHAMPIOSHIPS_ID.copaBrasil)
             leagueId = CHAMPIOSHIPS_ID.copaBrasil
 
-        setLeague(leagueId)
-    }
-
-    return (
-        <Fragment>
-            <Link style={{display: 'inline-table'}} to="/campeonato">
-                <ButtonOptions type="button" onClick={() => handleSelectLeague(CHAMPIOSHIPS_ID.brasileiro)}>
-                    <span>Campeonato Brasileiro</span>
-                </ButtonOptions>
-            </Link>
-            <Link style={{display: 'inline-table'}} to="/campeonato">
-                <ButtonOptions type="button" onClick={() => handleSelectLeague(CHAMPIOSHIPS_ID.copaBrasil)}>
-                    <span>Copa do Brasil</span>
-                </ButtonOptions>
-            </Link>
-        </Fragment>
-    )
-}
-
-const ChangeFavoriteTeam = ({ action }) => {
-    const removeFavoriteTeam = action
-
-    const handleChangeFavTeam = () => {
-        localStorage.removeItem('favoriteTeam')
-        removeFavoriteTeam()
-    }
-
-    return (
-        <Fragment>
-            <Link style={{display: 'inline-table'}} to="/timeFavorito">
-                <ButtonOptions type="button" onClick={handleChangeFavTeam}>Mudar time favorito</ButtonOptions>
-            </Link>
-        </Fragment>
-    )
-}
-
-const Header = (props) => {
-    const setLeagueSelected = props.setChampioship
-    const changeLeagueMatches = props.changeLeagueMatches
-    const removeMyTeam = props.clearMyTeam
-
-    const handleOnChangeLeague = (e) => {
-        const leagueId = e.target.value
-        props.changePage(1)
-        changeLeagueMatches(leagueId)
+        handleResetPagination()
+        setLeagueSelected(leagueId)
     }
 
     return (
         <Nav>
             <div className="container">
                 <div className="row">
-                    <div className='col-6 text-left'>
+                    <div className='col-12 col-md-6 text-left'>
                         <Link to="/home">
-                            <div>
+                            <div onClick={handleResetPagination}>
                                 <TeamLogo largeImage={true} team={props.team} />
                                 <Title>{props.team.nome}</Title>
                                 <HeaderDivisor className='mt-2 mb-3' />
@@ -129,9 +122,34 @@ const Header = (props) => {
                             </LeagueSelect>
                         </Condition>
                     </div>
-                    <div className="btn-group" role='group'>
-                        <ChangeFavoriteTeam action={removeMyTeam} />
-                        <Leagues leagueSelection={setLeagueSelected} />
+                    <div className="col-12 mt-4 mb-2" role='group'>
+                        <div style={{ position: 'relative', display: 'inline-block' }} className="col-4 col-md-3">
+                            <Link to="/timeFavorito">
+                                <ButtonOptions className='btn' onClick={handleChangeFavTeam}>
+                                    <span>Mudar time favorito</span>
+                                </ButtonOptions>
+                            </Link>
+                        </div>
+                        <div style={{ position: 'relative', display: 'inline-block' }} className="col-4 col-md-3">
+                            <Link to="/campeonato">
+                                <ButtonOptions
+                                    active={onLeagueId === CHAMPIOSHIPS_ID.brasileiro}
+                                    className='btn'
+                                    onClick={() => handleSelectLeague(CHAMPIOSHIPS_ID.brasileiro)}>
+                                    <span>Campeonato Brasileiro</span>
+                                </ButtonOptions>
+                            </Link>
+                        </div>
+                        <div style={{ position: 'relative', display: 'inline-block' }} className="col-4 col-md-3">
+                            <Link to="/campeonato">
+                                <ButtonOptions
+                                    active={onLeagueId === CHAMPIOSHIPS_ID.copaBrasil}
+                                    className='btn'
+                                    onClick={() => handleSelectLeague(CHAMPIOSHIPS_ID.copaBrasil)}>
+                                    <span>Copa do Brasil</span>
+                                </ButtonOptions>
+                            </Link>
+                        </div>
                     </div>
                 </div>
             </div>

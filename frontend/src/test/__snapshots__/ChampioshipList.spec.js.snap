@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`The display of element Should not regress 1`] = `
+<div
+  className="sc-AxirZ dnNJqn"
+>
+  <div
+    className="sc-AxjAm jAqCDh"
+  />
+</div>
+`;
